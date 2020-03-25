@@ -11,11 +11,12 @@ form.addEventListener('submit', (e)=>{
             if(data.error){
                 return p1.textContent = data.error;
             }
+
             p1.textContent = `Today in ${data.destination}, the temperature is ${data.temp}`;
             p2.textContent = `${data.summary}`;
         });
     });
     
     e.preventDefault();
-    e.target.value = '';
+    search.value = '';
 });
