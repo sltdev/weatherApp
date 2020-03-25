@@ -1,6 +1,9 @@
 const path = require('path')
 const express = require('express');
 const hbs = require('hbs');
+const geoCode = require('./utils/geoCode');
+const foreCast = require('./utils/forecast');
+
 const app = express();
 
 //Defines Paths for Express
@@ -17,40 +20,78 @@ hbs.registerPartials(hbsPath);
 app.use(express.static(staticPath));
 
 
-app.get('', (req, res)=>{
+app.get('', (req, res) => {
     res.render('index', {
         title: 'Home Page',
-        message: 'The Ledger Nano X is a Bluetooth® enabled secure device that stores your private keys. Make sure all your crypto assets are safe, wherever you go.',
+        message: 'Welcome to your local weather finder',
         name: 'Samson'
     });
 });
 
-app.get('/about', (req, res)=>{
+app.get('/about', (req, res) => {
     res.render('about', {
         title: "About Page",
-        message: 'device that stores your private keys. Make sure all your crypto assets',
+        message: 'Simple weather web app',
         name: 'Samson'
     });
 });
 
-app.get('/help', (req, res)=>{
-    res.render('help',{
+app.get('/help', (req, res) => {
+    res.render('help', {
         title: 'Help',
-        message: 'The Ledger Nano X is a Bluetooth® enabled secure device',
+        message: 'Please contact sltdev@protonmail.com if you have any questions',
         name: 'Samson'
     });
+});
+
+app.get('/weather', (req, res) => {
+    if (!req.query.search) {
+         res.send({
+            error: 'Please enter a valid address'
+        });
+    } else {
+        geoCode(req.query.search, (err, data = {}) => {
+            if(err){
+                return res.send({
+                    error: err
+                });
+            }
+            foreCast(data.long, data.lat, data.destination, (err, forecastData = {}) => {
+                if(err){
+                    return res.send({
+                        error: err
+                    });
+                }
+                res.send({
+                    destination: forecastData.destination,
+                    temp: forecastData.temp,
+                    summary: forecastData.dailySummary
+                })
+            });
+            
+            
+            
+            
+
+        });
+        // return res.send({
+        //     location: data.location,
+        //     temp: data.temp,
+        //     summary: data.dailySummary
+        // });
+    }
 });
 
 //404 page always comes last behind all over Route handlers.
-app.get('/help/*', (req, res)=>{
+app.get('/help/*', (req, res) => {
     res.render('page404', {
         title: '404 Page',
         message: 'Sorry please select another message from the help section'
     });
 });
 
-app.get('*', (req, res)=>{
-    res.render('page404',{
+app.get('*', (req, res) => {
+    res.render('page404', {
         message: "Sorry no page found",
         name: 'Samson'
     });
