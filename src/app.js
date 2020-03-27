@@ -75,11 +75,6 @@ app.get('/weather', (req, res) => {
             
 
         });
-        // return res.send({
-        //     location: data.location,
-        //     temp: data.temp,
-        //     summary: data.dailySummary
-        // });
     }
 });
 
@@ -98,4 +93,4 @@ app.get('*', (req, res) => {
     });
 });
 
-app.listen(port, console.log(`server is listening on port:${port}`));
+app.listen(port, ()=>{console.log(`server is listening on port:${port}`)});
