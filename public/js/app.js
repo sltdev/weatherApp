@@ -6,7 +6,7 @@ const p2 = document.querySelector('.p2');
 form.addEventListener('submit', (e)=>{
     
     const userInput = search.value;
-    fetch(`http://localhost:3000/weather?search=${encodeURIComponent(userInput)}`).then((response)=>{
+    fetch(`/weather?search=${encodeURIComponent(userInput)}`).then((response)=>{
         response.json().then((data)=>{
             if(data.error){
                 return p1.textContent = data.error;
