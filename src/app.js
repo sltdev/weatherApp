@@ -5,6 +5,7 @@ const geoCode = require('./utils/geoCode');
 const foreCast = require('./utils/forecast');
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 //Defines Paths for Express
 const staticPath = path.join(__dirname, '../public/');
@@ -97,4 +98,4 @@ app.get('*', (req, res) => {
     });
 });
 
-app.listen(3000, console.log('server is listening'));
+app.listen(port, console.log('server is listening'));
